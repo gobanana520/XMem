@@ -130,72 +130,72 @@ if is_youtube or args.save_scores:
 else:
     out_path = args.output
 
-if is_youtube:
-    if args.dataset == "Y18":
-        yv_path = args.y18_path
-    elif args.dataset == "Y19":
-        yv_path = args.y19_path
+# if is_youtube:
+#     if args.dataset == "Y18":
+#         yv_path = args.y18_path
+#     elif args.dataset == "Y19":
+#         yv_path = args.y19_path
 
-    if args.split == "val":
-        args.split = "valid"
-        meta_dataset = YouTubeVOSTestDataset(
-            data_root=yv_path, split="valid", size=args.size
-        )
-    elif args.split == "test":
-        meta_dataset = YouTubeVOSTestDataset(
-            data_root=yv_path, split="test", size=args.size
-        )
-    else:
-        raise NotImplementedError
+#     if args.split == "val":
+#         args.split = "valid"
+#         meta_dataset = YouTubeVOSTestDataset(
+#             data_root=yv_path, split="valid", size=args.size
+#         )
+#     elif args.split == "test":
+#         meta_dataset = YouTubeVOSTestDataset(
+#             data_root=yv_path, split="test", size=args.size
+#         )
+#     else:
+#         raise NotImplementedError
 
-elif is_davis:
-    if args.dataset == "D16":
-        if args.split == "val":
-            # Set up Dataset, a small hack to use the image set in the 2017 folder because the 2016 one is of a different format
-            meta_dataset = DAVISTestDataset(
-                args.d16_path,
-                imset="../../2017/trainval/ImageSets/2016/val.txt",
-                size=args.size,
-            )
-        else:
-            raise NotImplementedError
-        palette = None
-    elif args.dataset == "D17":
-        if args.split == "val":
-            meta_dataset = DAVISTestDataset(
-                path.join(args.d17_path, "trainval"),
-                imset="2017/val.txt",
-                size=args.size,
-            )
-        elif args.split == "test":
-            meta_dataset = DAVISTestDataset(
-                path.join(args.d17_path, "test-dev"),
-                imset="2017/test-dev.txt",
-                size=args.size,
-            )
-        else:
-            raise NotImplementedError
+# elif is_davis:
+#     if args.dataset == "D16":
+#         if args.split == "val":
+#             # Set up Dataset, a small hack to use the image set in the 2017 folder because the 2016 one is of a different format
+#             meta_dataset = DAVISTestDataset(
+#                 args.d16_path,
+#                 imset="../../2017/trainval/ImageSets/2016/val.txt",
+#                 size=args.size,
+#             )
+#         else:
+#             raise NotImplementedError
+#         palette = None
+#     elif args.dataset == "D17":
+#         if args.split == "val":
+#             meta_dataset = DAVISTestDataset(
+#                 path.join(args.d17_path, "trainval"),
+#                 imset="2017/val.txt",
+#                 size=args.size,
+#             )
+#         elif args.split == "test":
+#             meta_dataset = DAVISTestDataset(
+#                 path.join(args.d17_path, "test-dev"),
+#                 imset="2017/test-dev.txt",
+#                 size=args.size,
+#             )
+#         else:
+#             raise NotImplementedError
 
-elif is_lv:
-    if args.dataset == "LV1":
-        meta_dataset = LongTestDataset(path.join(args.lv_path, "long_video"))
-    elif args.dataset == "LV3":
-        meta_dataset = LongTestDataset(path.join(args.lv_path, "long_video_x3"))
-    else:
-        raise NotImplementedError
-elif args.dataset == "G":
-    meta_dataset = LongTestDataset(path.join(args.generic_path), size=args.size)
-    if not args.save_all:
-        args.save_all = True
-        print("save_all is forced to be true in generic evaluation mode.")
-elif args.dataset == "HandObject":
-    meta_dataset = HandObjectDataset(path.join(args.generic_path), size=args.size)
-    if not args.save_all:
-        args.save_all = True
-        print("save_all is forced to be true in generic evaluation mode.")
-else:
-    raise NotImplementedError
-
+# elif is_lv:
+#     if args.dataset == "LV1":
+#         meta_dataset = LongTestDataset(path.join(args.lv_path, "long_video"))
+#     elif args.dataset == "LV3":
+#         meta_dataset = LongTestDataset(path.join(args.lv_path, "long_video_x3"))
+#     else:
+#         raise NotImplementedError
+# elif args.dataset == "G":
+#     meta_dataset = LongTestDataset(path.join(args.generic_path), size=args.size)
+#     if not args.save_all:
+#         args.save_all = True
+#         print("save_all is forced to be true in generic evaluation mode.")
+# elif args.dataset == "HandObject":
+#     meta_dataset = HandObjectDataset(path.join(args.generic_path), size=args.size)
+#     if not args.save_all:
+#         args.save_all = True
+#         print("save_all is forced to be true in generic evaluation mode.")
+# else:
+#     raise NotImplementedError
+meta_dataset = HandObjectDataset(path.abspath(args.generic_path), size=args.size)
 torch.autograd.set_grad_enabled(False)
 
 # Set up loader
@@ -296,7 +296,7 @@ for vid_reader in progressbar(
 
             # fig = plt.figure()
             # ax = fig.add_subplot(1, 2, 1)
-            # im = data['rgb'][0].cpu().numpy()
+            # im = data["rgb"][0].cpu().numpy()
             # im = im.transpose(1, 2, 0)
             # plt.imshow(im)
             # ax = fig.add_subplot(1, 2, 2)

@@ -202,6 +202,10 @@ class SequenceReader(Dataset):
             shape = np.array(size_im).shape[:2]
 
         gt_path = path.join(self.mask_dir, frame[:-4] + ".png")
+        if not path.exists(gt_path):
+            gt_path = path.join(
+                self.mask_dir, (frame[:-4] + ".png").replace("color", "mask")
+            )
         img = self.im_transform(img)
 
         load_mask = self.use_all_mask or (gt_path == self.first_gt_path)

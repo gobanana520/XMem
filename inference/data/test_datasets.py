@@ -105,11 +105,13 @@ class HandObjectDataset:
     def __init__(self, data_root, size=-1):
         # self.image_dir = path.join(data_root, "JPEGImages")
         self.image_dir = path.join(data_root, "./")
-        self.mask_dir = path.join(data_root, "./data_processing/xmem/annotations")
+        # self.mask_dir = path.join(data_root, "./data_processing/xmem/annotations")
+        self.mask_dir = path.join(data_root, "./data_processing/unseen")
         self.size = size
 
         # self.vid_list = sorted(os.listdir(self.image_dir))
         self.vid_list = sorted(os.listdir(self.mask_dir))
+        print(self.vid_list)
 
     def get_datasets(self):
         for video in self.vid_list:
