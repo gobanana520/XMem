@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from glob import glob
-from tqdm import tqdm
+from progressbar import progressbar
 import argparse
 from colors import COLORS
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     # assert os.path.exists(args.output), "Output path does not exist"
     data_folder = os.path.join(args.generic_path, "./")
     mask_folder = os.path.join(args.generic_path, "./data_processing/xmem/output")
-    out_folder = os.path.join(args.generic_path, "./data_processing/xmem/visualization")
+    out_folder = os.path.join(args.generic_path, "./data_processing/xmem/output_vis")
     for dir in os.listdir(mask_folder):
         bg_dir = os.path.join(data_folder, dir)
         mask_dir = os.path.join(mask_folder, dir)
@@ -119,8 +119,8 @@ if __name__ == "__main__":
         if not os.path.exists(save_folder):
             os.makedirs(save_folder)
         print("Processing:", dir)
-        for bg_image_file, mask_image_file in tqdm(
-            zip(bg_image_files, mask_image_files)
+        for bg_image_file, mask_image_file in progressbar(
+            zip(bg_image_files, mask_image_files), max_value=len(bg_image_files)
         ):
             bg_image = cv2.imread(bg_image_file)
             mask_image = cv2.imread(mask_image_file, cv2.IMREAD_GRAYSCALE)
